@@ -1,0 +1,7 @@
+# 由 tools/build_artifact.py 產生的發佈用檔案，隨時可重建
+dist/
+
+# 本機工具設定與快取
+.claude/settings.local.json
+__pycache__/
+*.log

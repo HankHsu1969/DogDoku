@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-Hant" class="standalone">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>汪汪數獨 Dogdoku</title>
+<meta name="description" content="可愛狗狗邏輯解謎：每個顏色、每一行、每一列各放一隻狗，而且狗狗不能相鄰。共 50 關。">
+<meta name="theme-color" content="#FFF5E2">
+<link rel="icon" type="image/png" href="assets/img/icon-192.png">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Chiron+GoRound+TC:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- 圖示 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="3.1 3.18"/><circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M9.2 9.3a2.9 2.9 0 1 1 4.2 2.6c-.9.5-1.4 1.1-1.4 2.1v.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 4.5 4 9.5l5 5M4 9.5h10.5a5.5 5.5 0 0 1 0 11H10" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 3.5v5h-5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-paw" viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="5.2" ry="4.4" fill="currentColor"/><ellipse cx="5.2" cy="10.6" rx="2.2" ry="2.7" fill="currentColor"/><ellipse cx="9.3" cy="6.4" rx="2.2" ry="2.8" fill="currentColor"/><ellipse cx="14.7" cy="6.4" rx="2.2" ry="2.8" fill="currentColor"/><ellipse cx="18.8" cy="10.6" rx="2.2" ry="2.7" fill="currentColor"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-bone" viewBox="0 0 24 24"><g transform="rotate(-40 12 12)" fill="currentColor"><rect x="6" y="9.8" width="12" height="4.4" rx="1.6"/><circle cx="5.6" cy="9.6" r="2.7"/><circle cx="5.6" cy="14.4" r="2.7"/><circle cx="18.4" cy="9.6" r="2.7"/><circle cx="18.4" cy="14.4" r="2.7"/></g></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5C5.4 15.6 2.5 12.6 2.5 8.9A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 9.5 2.3c0 3.7-2.9 6.7-9.5 11.6Z" fill="currentColor"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.6 2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.8l-5.8 3.3 1.4-6.4-4.9-4.4 6.5-.7Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3" fill="currentColor"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.6 7.6 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="13.5" y="3.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="3.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/></symbol>
+</svg>
+
+<div id="app">
+  <!-- 首頁 -->
+  <section id="screen-home" class="screen home">
+    <div class="home-inner">
+      <h1 class="logo" aria-label="汪汪數獨">
+        <span class="logo-zh"><b style="--c:#FF9EBB">汪</b><b style="--c:#FFD45E">汪</b><b style="--c:#86C5F4">數</b><b style="--c:#B9A8F2">獨</b></span>
+        <span class="logo-en">DOGDOKU!</span>
+      </h1>
+      <div class="hero"><img src="assets/img/keyart.webp" alt="五隻小狗從彩色拼塊棋盤後面探出頭" width="1600" height="904"></div>
+      <div class="home-actions">
+        <button id="btn-play" class="btn btn-primary btn-big"><svg class="ic"><use href="#i-paw"/></svg><span id="play-label">開始遊戲</span></button>
+        <div class="home-row">
+          <button id="btn-levels" class="btn btn-soft"><svg class="ic"><use href="#i-grid"/></svg>選擇關卡</button>
+          <button id="btn-howto" class="btn btn-soft"><svg class="ic"><use href="#i-help"/></svg>玩法說明</button>
+          <button id="btn-settings-home" class="btn btn-soft btn-icon" aria-label="設定"><svg class="ic"><use href="#i-gear"/></svg></button>
+        </div>
+        <p class="home-meta"><span class="meta-pill"><svg class="ic star"><use href="#i-star"/></svg><span id="home-stars">0 / 150</span></span><span class="meta-pill"><svg class="ic bone"><use href="#i-bone"/></svg><span id="home-bones">3</span> 根骨頭</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 關卡選擇 -->
+  <section id="screen-levels" class="screen levels" hidden>
+    <header class="topbar">
+      <button class="btn-round" id="levels-back" aria-label="返回首頁"><svg class="ic"><use href="#i-back"/></svg></button>
+      <h2>選擇關卡</h2>
+      <span class="meta-pill"><svg class="ic star"><use href="#i-star"/></svg><span id="levels-stars">0</span></span>
+    </header>
+    <div class="levels-scroll" id="levels-list"></div>
+  </section>
+
+  <!-- 遊戲 -->
+  <section id="screen-game" class="screen game" hidden>
+    <header class="topbar">
+      <button class="btn-round" id="game-back" aria-label="返回關卡列表"><svg class="ic"><use href="#i-back"/></svg></button>
+      <div class="title-block">
+        <h2 id="game-title">第 1 關</h2>
+        <p id="game-sub">柴犬公園 · 5×5</p>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-round" id="game-help" aria-label="玩法說明"><svg class="ic"><use href="#i-help"/></svg></button>
+        <button class="btn-round" id="game-settings" aria-label="設定"><svg class="ic"><use href="#i-gear"/></svg></button>
+      </div>
+    </header>
+
+    <div class="status">
+      <span class="pill" id="pill-dogs"><img id="pill-dog-img" src="assets/img/shiba.webp" alt=""><b id="dog-count">0/5</b></span>
+      <span class="pill hearts" id="hearts" aria-label="剩餘愛心"></span>
+      <span class="pill timer"><svg class="ic"><use href="#i-clock"/></svg><b id="timer">00:00</b></span>
+    </div>
+
+    <div class="rules" role="list">
+      <span class="rule" id="rule-0" role="listitem">每色 1 隻狗</span>
+      <span class="rule" id="rule-1" role="listitem">每行每列 1 隻狗</span>
+      <span class="rule" id="rule-2" role="listitem">狗狗不能相鄰</span>
+    </div>
+
+    <div class="board-wrap" id="board-wrap">
+      <div class="board" id="board" tabindex="0" aria-label="遊戲棋盤，方向鍵移動，空白鍵放狗狗，X 鍵標記"></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="toolbar">
+      <button class="tool" id="tool-undo" aria-label="復原標記"><svg class="ic"><use href="#i-undo"/></svg><span>復原</span></button>
+      <div class="mode" role="radiogroup" aria-label="點擊模式">
+        <button class="mode-btn on" id="mode-dog" role="radio" aria-checked="true"><svg class="ic"><use href="#i-paw"/></svg><span>放狗</span></button>
+        <button class="mode-btn" id="mode-mark" role="radio" aria-checked="false"><svg class="ic"><use href="#i-x"/></svg><span>標記</span></button>
+      </div>
+      <button class="tool" id="tool-hint" aria-label="使用骨頭提示"><svg class="ic"><use href="#i-bone"/></svg><span>提示</span><i class="badge" id="bone-badge">3</i></button>
+      <button class="tool" id="tool-restart" aria-label="重新開始本關"><svg class="ic"><use href="#i-restart"/></svg><span id="restart-label">重來</span></button>
+    </div>
+    <p class="howto-line">點格子放狗狗 · 長按或右鍵標記 ✕ · 拖曳可連續標記</p>
+  </section>
+</div>
+
+<!-- 遊戲封面：載入時全螢幕顯示，點一下進入（同時啟動音樂） -->
+<section id="cover" class="cover" aria-label="汪汪數獨 遊戲封面">
+  <picture>
+    <source media="(max-aspect-ratio: 4/5)" srcset="assets/img/cover-portrait.webp">
+    <img class="cover-art" src="assets/img/cover-landscape.webp" alt="五隻小狗圍著彩色的數獨棋盤，坐在開滿小花的草坡上">
+  </picture>
+  <div class="cover-glow" aria-hidden="true"></div>
+  <div class="cover-title">
+    <div class="logo logo-cover" role="img" aria-label="汪汪數獨 DOGDOKU">
+      <span class="logo-zh" aria-hidden="true"><b style="--c:#FF9EBB">汪</b><b style="--c:#FFD45E">汪</b><b style="--c:#86C5F4">數</b><b style="--c:#B9A8F2">獨</b></span>
+      <span class="logo-en" aria-hidden="true">DOGDOKU!</span>
+    </div>
+    <p class="cover-tag">5 種狗狗 · 50 道邏輯謎題</p>
+  </div>
+  <div class="cover-bottom">
+    <div class="loader" id="cover-loader" role="progressbar" aria-label="載入中" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="cover-bar"></i></div>
+    <button class="btn btn-primary btn-big cover-start" id="cover-start" hidden><svg class="ic"><use href="#i-paw"/></svg>點一下開始</button>
+    <p class="cover-hint"><svg class="ic"><use href="#i-sound"/></svg>開啟聲音，聽聽狗狗們的音樂</p>
+  </div>
+</section>
+
+<!-- 過關 -->
+<div class="modal" id="modal-win" hidden>
+  <div class="sheet win-sheet" role="dialog" aria-modal="true" aria-labelledby="win-title">
+    <img id="win-dog" class="sheet-dog bounce" src="assets/img/party-shiba.webp" alt="開心慶祝的柴犬">
+    <h3 id="win-title">過關啦！</h3>
+    <div class="stars" id="win-stars">
+      <svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg>
+    </div>
+    <p class="stats" id="win-stats"></p>
+    <p class="reward" id="win-reward" hidden><svg class="ic bone"><use href="#i-bone"/></svg>三星獎勵：骨頭 +1</p>
+    <div class="sheet-actions">
+      <button class="btn btn-primary btn-big" id="win-next">下一關</button>
+      <div class="home-row">
+        <button class="btn btn-soft" id="win-replay"><svg class="ic"><use href="#i-restart"/></svg>重玩</button>
+        <button class="btn btn-soft" id="win-levels"><svg class="ic"><use href="#i-grid"/></svg>關卡</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 失敗 -->
+<div class="modal" id="modal-lose" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lose-title">
+    <img class="sheet-dog" src="assets/img/sad.webp" alt="難過的柴犬">
+    <h3 id="lose-title">愛心用完了</h3>
+    <p class="stats">別灰心，狗狗們還在等你把牠們送回家！</p>
+    <div class="sheet-actions">
+      <button class="btn btn-primary btn-big" id="lose-retry">再試一次</button>
+      <button class="btn btn-soft" id="lose-levels"><svg class="ic"><use href="#i-grid"/></svg>關卡列表</button>
+    </div>
+  </div>
+</div>
+
+<!-- 玩法 -->
+<div class="modal" id="modal-howto" hidden>
+  <div class="sheet howto-sheet" role="dialog" aria-modal="true" aria-labelledby="howto-title">
+    <h3 id="howto-title">怎麼玩？</h3>
+    <div class="howto-body">
+      <div class="mini" id="mini-board" aria-label="已完成的 4×4 範例"></div>
+      <ol class="rule-list">
+        <li><b class="chip" style="--c:#FF9EBB">每色 1 隻狗</b>每個顏色區塊剛好放一隻狗狗。</li>
+        <li><b class="chip" style="--c:#86C5F4">每行每列 1 隻狗</b>每一橫列、每一直行也都剛好一隻。</li>
+        <li><b class="chip" style="--c:#FFD45E">狗狗不能相鄰</b>兩隻狗狗不能碰在一起，斜角也不行。</li>
+      </ol>
+    </div>
+    <ul class="controls">
+      <li><svg class="ic"><use href="#i-paw"/></svg><span><b>點一下</b>放狗狗。放錯會扣一顆愛心，三顆用完就要重來。</span></li>
+      <li><svg class="ic"><use href="#i-x"/></svg><span><b>長按、右鍵或切到「標記」</b>可以畫 ✕，拖曳能一次標很多格。</span></li>
+      <li><svg class="ic"><use href="#i-bone"/></svg><span><b>骨頭提示</b>會幫你放一隻狗。三星過關可以再拿一根。</span></li>
+    </ul>
+    <button class="btn btn-primary btn-big" id="howto-ok">知道了，開始吧！</button>
+  </div>
+</div>
+
+<!-- 設定 -->
+<div class="modal" id="modal-settings" hidden>
+  <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <h3 id="settings-title">設定</h3>
+    <label class="set-row"><span>背景音樂</span><input type="checkbox" class="switch" id="set-music"></label>
+    <label class="set-row"><span>音樂音量</span><input type="range" id="set-music-vol" min="0" max="100" step="5"></label>
+    <label class="set-row"><span>音效</span><input type="checkbox" class="switch" id="set-sfx"></label>
+    <label class="set-row"><span>自動標記 ✕<small>放好狗狗後，自動把不能放的格子打 ✕</small></span><input type="checkbox" class="switch" id="set-autox"></label>
+    <label class="set-row"><span>震動回饋<small>僅部分手機支援</small></span><input type="checkbox" class="switch" id="set-vibrate"></label>
+    <div class="set-row"><span>重置進度<small>清除所有星星、紀錄與骨頭</small></span><button class="btn btn-danger" id="set-reset">重置</button></div>
+    <button class="btn btn-primary btn-big" id="settings-ok">完成</button>
+  </div>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="js/levels.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
